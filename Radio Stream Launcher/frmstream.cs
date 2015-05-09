@@ -141,6 +141,9 @@ namespace Radio_Stream_Launcher
                     this.Text = "Radio Stream Launcher";
                 }
             }
+
+            //Status des Volumes aktualisieren, da auch mit dem Soundmixer die Lautstärke eingestellt werden kann
+            hscrollvolume.Value = wmpl.Volume; 
         }
 
         private void cbserver_CheckedChanged(object sender, EventArgs e)
@@ -274,6 +277,11 @@ namespace Radio_Stream_Launcher
             sl.Dateipfad = cfg.StreamPfad;
             streamlisteLadenToolStripMenuItem_Click(streamlisteLadenToolStripMenuItem, null);
             ConfigWMPProxy();
+        }
+
+        private void hscrollvolume_ValueChanged(object sender, EventArgs e)
+        {
+            wmpl.Volume = hscrollvolume.Value; //Damit sich die Volume ändert
         }
     }
 }

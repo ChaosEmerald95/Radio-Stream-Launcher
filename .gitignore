@@ -1,0 +1,29 @@
+*.sln
+*.vbproj
+*.suo
+My Project
+[Bb]in
+[Dd]ebug
+[Rr]elease
+App.config
+obj
+
+Properties
+*.csproj
+*.Designer.vb
+*.Designer.cs
+*.resx
+*.vbproj.user
+*.dll
+*.jpg
+*.msi
+SLV Datenbank-Explorer 2.0 Installer/Debug/SLV Datenbank-Explorer 2.0 Installer.msi
+SLV Datenbank-Explorer 2.0 Installer/
+SLV Datenbank-Explorer 2.0 Installer/
+SLV Datenbank-Explorer 2.0 Installer/
+SLV Datenbank-Explorer 2.0 Installer/*
+*.txt
+Icons
+Graphics
+SLV Datenbank-Explorer 2.0 Installer/
+Program.cs

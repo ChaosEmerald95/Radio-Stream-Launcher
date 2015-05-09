@@ -35,6 +35,7 @@ namespace Radio_Stream_Launcher
             streamlisteLadenToolStripMenuItem_Click(streamlisteLadenToolStripMenuItem, null);
             ConfigWMPProxy();
             hscrollvolume.Value = wmpl.Volume; //Damit das Volume einen Startwert hat.
+            volumetimer.Start(); 
         }
 
         private void streamlisteLadenToolStripMenuItem_Click(object sender, EventArgs e)
@@ -141,9 +142,6 @@ namespace Radio_Stream_Launcher
                     this.Text = "Radio Stream Launcher";
                 }
             }
-
-            //Status des Volumes aktualisieren, da auch mit dem Soundmixer die Lautstärke eingestellt werden kann
-            hscrollvolume.Value = wmpl.Volume; 
         }
 
         private void cbserver_CheckedChanged(object sender, EventArgs e)
@@ -282,6 +280,12 @@ namespace Radio_Stream_Launcher
         private void hscrollvolume_ValueChanged(object sender, EventArgs e)
         {
             wmpl.Volume = hscrollvolume.Value; //Damit sich die Volume ändert
+        }
+
+        private void volumetimer_Tick(object sender, EventArgs e)
+        {
+            //Status des Volumes aktualisieren, da auch mit dem Soundmixer die Lautstärke eingestellt werden kann
+            hscrollvolume.Value = wmpl.Volume; 
         }
     }
 }

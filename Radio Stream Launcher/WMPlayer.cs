@@ -19,7 +19,8 @@ namespace Radio_Stream_Launcher
         public WMPlayer()
         {
             _wmplayer = new WMPLib.WindowsMediaPlayer(); //Für den Media Player
-            _playstatus = PlayStatus.Stop;  
+            _playstatus = PlayStatus.Stop;
+            Volume = 100; //Damit das Volume auf 100 ist
         }
 
         /// <summary>

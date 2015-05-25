@@ -35,7 +35,10 @@ namespace Radio_Stream_Launcher
             streamlisteLadenToolStripMenuItem_Click(streamlisteLadenToolStripMenuItem, null);
             ConfigWMPProxy();
             hscrollvolume.Value = wmpl.Volume; //Damit das Volume einen Startwert hat.
-            volumetimer.Start(); 
+            volumetimer.Start();
+
+            //Gespeicherte Einstellungen wenn verfügbar nutzen
+            if (File.Exists(Directory.GetCurrentDirectory() + "/volset.tmp") == true) LoadVolTmp();
         }
 
         private void streamlisteLadenToolStripMenuItem_Click(object sender, EventArgs e)
@@ -113,6 +116,8 @@ namespace Radio_Stream_Launcher
                     btnstream.Text = "Stream stoppen";
                     statustimer.Enabled = true;
                     statustimer.Start();
+                    webtimer.Enabled = true;
+                    webtimer.Start();
                 }
             }
             else
@@ -122,6 +127,8 @@ namespace Radio_Stream_Launcher
                     btnstream.Text = "Stream starten";
                     statustimer.Stop();
                     statustimer.Enabled = false;
+                    webtimer.Stop();
+                    webtimer.Enabled = false;
                     cbserver.Checked = false;
                     this.Text = "Radio Stream Launcher";
                 }
@@ -138,6 +145,8 @@ namespace Radio_Stream_Launcher
                     btnstream.Text = "Stream starten";
                     statustimer.Stop();
                     statustimer.Enabled = false;
+                    webtimer.Stop();
+                    webtimer.Enabled = false;
                     cbserver.Checked = false;
                     this.Text = "Radio Stream Launcher";
                 }
@@ -285,7 +294,47 @@ namespace Radio_Stream_Launcher
         private void volumetimer_Tick(object sender, EventArgs e)
         {
             //Status des Volumes aktualisieren, da auch mit dem Soundmixer die Lautstärke eingestellt werden kann
-            hscrollvolume.Value = wmpl.Volume; 
+            hscrollvolume.Value = wmpl.Volume;
+ 
+            //Es soll aktualisiert werden, ob von außerhalb der Ton stummgeschalten wurde
+            if (wmpl.Mute == true) btnmute.Text = "<";
+            if (wmpl.Mute == false) btnmute.Text = "<))";
+        }
+
+        private void btnmute_Click(object sender, EventArgs e)
+        {
+            //Stellt ein, ob Mute oder nicht
+            if (wmpl.Mute == true) wmpl.Mute = false;
+            else wmpl.Mute = true;
+        }
+
+        private void webtimer_Tick(object sender, EventArgs e)
+        {
+            wwwbrowser.Refresh(); //Aktualisiert die Website
+        }
+
+        private void SaveVolTmp()
+        {
+            StreamWriter sw = new StreamWriter(Directory.GetCurrentDirectory() + "/volset.tmp");
+            sw.WriteLine(wmpl.Volume.ToString());
+            sw.WriteLine(wmpl.Mute.ToString());
+            sw.Close();
+        }
+
+        private void LoadVolTmp()
+        {
+            StreamReader sr = new StreamReader(Directory.GetCurrentDirectory() + "/volset.tmp");
+            wmpl.Volume = Convert.ToInt32(sr.ReadLine());
+            string mute = sr.ReadLine();
+            sr.Close(); //Stream kann schon geschlossen werden
+            if (mute == "True") wmpl.Mute = true;
+            if (mute == "False") wmpl.Mute = false;
+            File.Delete(Directory.GetCurrentDirectory() + "/volset.tmp"); //Tmp-Datei wird vernichtet
+        }
+
+        private void frmstream_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            SaveVolTmp(); //Soll die letzten Volume-Einstellungen cachen, damit diese beim nächsten Start verwendet werden können
         }
     }
 }

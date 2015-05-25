@@ -21,6 +21,7 @@ namespace Radio_Stream_Launcher
             _wmplayer = new WMPLib.WindowsMediaPlayer(); //Für den Media Player
             _playstatus = PlayStatus.Stop;
             Volume = 100; //Damit das Volume auf 100 ist
+            Mute = false; //Damit s nicht stummgeschalten ist
         }
 
         /// <summary>
@@ -51,6 +52,15 @@ namespace Radio_Stream_Launcher
         {
             get { return _wmplayer.settings.volume; }
             set { _wmplayer.settings.volume = value; }
+        }
+
+        /// <summary>
+        /// Ruft ab, ob die Lautstärke auf Stumm geschalten ist oder legt diesen fest
+        /// </summary>
+        public bool Mute
+        {
+            get { return _wmplayer.settings.mute; }
+            set { _wmplayer.settings.mute = value; }
         }
 
         /// <summary>

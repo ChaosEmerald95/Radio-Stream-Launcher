@@ -265,11 +265,14 @@ namespace Radio_Stream_Launcher
 
         public void ConfigWMPProxy()
         {
-            if (cfg.ProxyOn == true) wmpl.SetProxySettings = WMPlayer.ProxySetting.ManualSettings;
+            if (cfg.ProxyOn == true)
+            {
+                wmpl.SetProxySettings = WMPlayer.ProxySetting.ManualSettings;
+                wmpl.ProxyBypassForLocal = cfg.ProxyBypass;
+                wmpl.ProxyName = cfg.ProxyName;
+                wmpl.ProxyPort = cfg.ProxyPort; 
+            }
             if (cfg.ProxyOn == false) wmpl.SetProxySettings = WMPlayer.ProxySetting.NoProxy;
-            wmpl.ProxyBypassForLocal = cfg.ProxyBypass;
-            wmpl.ProxyName = cfg.ProxyName;
-            wmpl.ProxyPort = cfg.ProxyPort; 
         }
 
         private void sicherungErstellenToolStripMenuItem_Click(object sender, EventArgs e)

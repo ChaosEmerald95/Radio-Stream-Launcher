@@ -116,8 +116,6 @@ namespace Radio_Stream_Launcher
                     btnstream.Text = "Stream stoppen";
                     statustimer.Enabled = true;
                     statustimer.Start();
-                    webtimer.Enabled = true;
-                    webtimer.Start();
                 }
             }
             else
@@ -127,8 +125,6 @@ namespace Radio_Stream_Launcher
                     btnstream.Text = "Stream starten";
                     statustimer.Stop();
                     statustimer.Enabled = false;
-                    webtimer.Stop();
-                    webtimer.Enabled = false;
                     cbserver.Checked = false;
                     this.Text = "Radio Stream Launcher";
                 }
@@ -145,8 +141,6 @@ namespace Radio_Stream_Launcher
                     btnstream.Text = "Stream starten";
                     statustimer.Stop();
                     statustimer.Enabled = false;
-                    webtimer.Stop();
-                    webtimer.Enabled = false;
                     cbserver.Checked = false;
                     this.Text = "Radio Stream Launcher";
                 }
@@ -311,11 +305,6 @@ namespace Radio_Stream_Launcher
             else wmpl.Mute = true;
         }
 
-        private void webtimer_Tick(object sender, EventArgs e)
-        {
-            wwwbrowser.Refresh(); //Aktualisiert die Website
-        }
-
         private void SaveVolTmp()
         {
             StreamWriter sw = new StreamWriter(Directory.GetCurrentDirectory() + "/volset.tmp");
@@ -338,6 +327,11 @@ namespace Radio_Stream_Launcher
         private void frmstream_FormClosing(object sender, FormClosingEventArgs e)
         {
             SaveVolTmp(); //Soll die letzten Volume-Einstellungen cachen, damit diese beim nächsten Start verwendet werden können
+        }
+
+        private void btnrefresh_Click(object sender, EventArgs e)
+        {
+            wwwbrowser.Refresh();
         }
     }
 }

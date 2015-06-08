@@ -13,13 +13,14 @@ namespace Radio_Stream_Launcher
 {
     public partial class frmstream : Form
     {
-        const int maxheight = 379;
-        const int minheight = 186;
+        const int maxheight = 375;
+        const int minheight = 182;
 
         //Die Klassen
         StreamList sl;
         configuration cfg;
         WMPlayer wmpl;
+        ExtPlayer expl; //Für das Abspielen über den externen Player
         
         public frmstream()
         {
@@ -28,6 +29,7 @@ namespace Radio_Stream_Launcher
             cfg.LoadConfiguration();
             sl = new StreamList(cfg.StreamPfad);
             wmpl = new WMPlayer();
+            expl = new ExtPlayer();
         }
 
         private void frmstream_Load(object sender, EventArgs e)
@@ -88,7 +90,7 @@ namespace Radio_Stream_Launcher
 
         private void tvstream_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            if (wmpl.IsPlayed() == true )
+            if (wmpl.IsPlayed() == true || expl.IsPlayed() == true )
             {
                 return;
             }
@@ -108,25 +110,54 @@ namespace Radio_Stream_Launcher
 
         private void btnstream_Click(object sender, EventArgs e)
         {
-            if (wmpl.IsPlayed() == false)
+            if (wmpl.IsPlayed() == false || expl.IsPlayed() == false )
             {
-                wmpl.Streamurl = txtstreamurl.Text; 
-                if (wmpl.Play() == true)
+                if (cfg.ExternerPlayer == true)
                 {
-                    btnstream.Text = "Stream stoppen";
-                    statustimer.Enabled = true;
-                    statustimer.Start();
+                    wmpl.Streamurl = txtstreamurl.Text;
+                    if (wmpl.Play() == true)
+                    {
+                        btnstream.Text = "Stream stoppen";
+                        statustimer.Enabled = true;
+                        statustimer.Start();
+                    }
+                }
+                else
+                {
+                    expl.Streamurl = txtstreamurl.Text;
+                    if (expl.Play() == true)
+                    {
+                        btnstream.Text = "Stream stoppen";
+                        statustimer.Enabled = true;
+                        statustimer.Start();
+                    }
                 }
             }
             else
             {
-                if (wmpl.Stop() == true)
+                if (cfg.ExternerPlayer == true )
                 {
-                    btnstream.Text = "Stream starten";
-                    statustimer.Stop();
-                    statustimer.Enabled = false;
-                    cbserver.Checked = false;
-                    this.Text = "Radio Stream Launcher";
+                    if (expl.Stop() == true)
+                    {
+                        btnstream.Text = "Stream starten";
+                        statustimer.Stop();
+                        statustimer.Enabled = false;
+                        int w = this.Size.Width;
+                        this.Size = new Size(w, minheight);
+                        this.Text = "Radio Stream Launcher";
+                    }
+                }
+                else
+                {
+                    if (wmpl.Stop() == true)
+                    {
+                        btnstream.Text = "Stream starten";
+                        statustimer.Stop();
+                        statustimer.Enabled = false;
+                        int w = this.Size.Width;
+                        this.Size = new Size(w, minheight);
+                        this.Text = "Radio Stream Launcher";
+                    }
                 }
             }
         }
@@ -141,35 +172,24 @@ namespace Radio_Stream_Launcher
                     btnstream.Text = "Stream starten";
                     statustimer.Stop();
                     statustimer.Enabled = false;
-                    cbserver.Checked = false;
+                    int w = this.Size.Width;
+                    this.Size = new Size(w, minheight);
                     this.Text = "Radio Stream Launcher";
                 }
             }
-        }
 
-        private void cbserver_CheckedChanged(object sender, EventArgs e)
-        {
-            if (cbserver.Checked == true)
+            //Wenn Der Prozess beim externen Player nicht mehr da ist
+            if (cfg.ExternerPlayer == true && expl.ProcessAlive() == false)
             {
-                if (txtstreamurl.Text == "")
+                if (expl.Stop() == true)
                 {
-                    cbserver.Checked = false;
-                    return;
+                    btnstream.Text = "Stream starten";
+                    statustimer.Stop();
+                    statustimer.Enabled = false;
+                    int w = this.Size.Width;
+                    this.Size = new Size(w, minheight);
+                    this.Text = "Radio Stream Launcher";
                 }
-
-                Uri uri = new Uri(txtstreamurl.Text.Substring(0, txtstreamurl.Text.IndexOf("/", 8) + 1));
-                wwwbrowser.Url = uri;
-                wwwbrowser.Visible = true;
-                int w = this.Size.Width;
-                this.Size = new Size(w,maxheight);
-            }
-            else
-            {
-                Uri uri = new Uri("about:blank");
-                wwwbrowser.Url = uri;
-                wwwbrowser.Visible = false;
-                int w = this.Size.Width;
-                this.Size = new Size(w, minheight);
             }
         }
 
@@ -331,7 +351,32 @@ namespace Radio_Stream_Launcher
 
         private void btnrefresh_Click(object sender, EventArgs e)
         {
-            wwwbrowser.Refresh();
+            wwwbrowser.Refresh(); //Aktualisiert die Seite
+        }
+
+        private void btnweb_Click(object sender, EventArgs e)
+        {
+            if (this.Size.Height == minheight )
+            {
+                if (txtstreamurl.Text == "")
+                {
+                    return;
+                }
+
+                Uri uri = new Uri(txtstreamurl.Text.Substring(0, txtstreamurl.Text.IndexOf("/", 8) + 1));
+                wwwbrowser.Url = uri;
+                wwwbrowser.Visible = true;
+                int w = this.Size.Width;
+                this.Size = new Size(w, maxheight);
+            }
+            else
+            {
+                Uri uri = new Uri("about:blank");
+                wwwbrowser.Url = uri;
+                wwwbrowser.Visible = false;
+                int w = this.Size.Width;
+                this.Size = new Size(w, minheight);
+            }
         }
     }
 }

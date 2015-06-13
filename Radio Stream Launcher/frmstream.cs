@@ -110,9 +110,9 @@ namespace Radio_Stream_Launcher
 
         private void btnstream_Click(object sender, EventArgs e)
         {
-            if (wmpl.IsPlayed() == false || expl.IsPlayed() == false )
+            if (cfg.ExternerPlayer == false)
             {
-                if (cfg.ExternerPlayer == true)
+                if (wmpl.IsPlayed() == false) 
                 {
                     wmpl.Streamurl = txtstreamurl.Text;
                     if (wmpl.Play() == true)
@@ -120,31 +120,6 @@ namespace Radio_Stream_Launcher
                         btnstream.Text = "Stream stoppen";
                         statustimer.Enabled = true;
                         statustimer.Start();
-                    }
-                }
-                else
-                {
-                    expl.Streamurl = txtstreamurl.Text;
-                    if (expl.Play() == true)
-                    {
-                        btnstream.Text = "Stream stoppen";
-                        statustimer.Enabled = true;
-                        statustimer.Start();
-                    }
-                }
-            }
-            else
-            {
-                if (cfg.ExternerPlayer == true )
-                {
-                    if (expl.Stop() == true)
-                    {
-                        btnstream.Text = "Stream starten";
-                        statustimer.Stop();
-                        statustimer.Enabled = false;
-                        int w = this.Size.Width;
-                        this.Size = new Size(w, minheight);
-                        this.Text = "Radio Stream Launcher";
                     }
                 }
                 else
@@ -157,6 +132,34 @@ namespace Radio_Stream_Launcher
                         int w = this.Size.Width;
                         this.Size = new Size(w, minheight);
                         this.Text = "Radio Stream Launcher";
+                    }
+                }
+            }
+            else
+            {
+                if (expl.IsPlayed() == false)
+                {
+                    expl.Streamurl = txtstreamurl.Text;
+                    if (expl.Play() == true)
+                    {
+                        btnstream.Text = "Stream stoppen";
+                        statustimer.Enabled = true;
+                        statustimer.Start();
+                    }
+                }
+                else
+                {
+                    if (cfg.ExternerPlayer == true)
+                    {
+                        if (expl.Stop() == true)
+                        {
+                            btnstream.Text = "Stream starten";
+                            statustimer.Stop();
+                            statustimer.Enabled = false;
+                            int w = this.Size.Width;
+                            this.Size = new Size(w, minheight);
+                            this.Text = "Radio Stream Launcher";
+                        }
                     }
                 }
             }
@@ -306,6 +309,7 @@ namespace Radio_Stream_Launcher
         private void hscrollvolume_ValueChanged(object sender, EventArgs e)
         {
             wmpl.Volume = hscrollvolume.Value; //Damit sich die Volume ändert
+            tiptool.SetToolTip(hscrollvolume, hscrollvolume.Value.ToString());
         }
 
         private void volumetimer_Tick(object sender, EventArgs e)

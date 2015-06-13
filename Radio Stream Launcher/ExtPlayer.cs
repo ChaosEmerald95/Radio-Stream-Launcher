@@ -33,7 +33,7 @@ namespace Radio_Stream_Launcher
             set
             {
                 _streamurl = value;
-                p.StartInfo.FileName = value;
+                p.StartInfo.FileName = _tmpm3u ;
             }
         }
 

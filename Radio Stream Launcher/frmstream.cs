@@ -341,10 +341,16 @@ namespace Radio_Stream_Launcher
 
         private void SaveVolTmp()
         {
-            StreamWriter sw = new StreamWriter(Directory.GetCurrentDirectory() + "/volset.tmp");
-            sw.WriteLine(wmpl.Volume.ToString());
-            sw.WriteLine(wmpl.Mute.ToString());
-            sw.Close();
+            //Abfrage, ob der Ordner existiert. Wenn das Programm über einen externen Datenträger
+            //abgespielt wird und dieser während der Laufzeit entfernt wird, kann das Programm
+            //nicht geschlossen werden, da die Volume-Daten gespeichert werden sollen
+            if (Directory.Exists(Directory.GetCurrentDirectory()))
+            {
+                StreamWriter sw = new StreamWriter(Directory.GetCurrentDirectory() + "/volset.tmp");
+                sw.WriteLine(wmpl.Volume.ToString());
+                sw.WriteLine(wmpl.Mute.ToString());
+                sw.Close();
+            }
         }
 
         private void LoadVolTmp()

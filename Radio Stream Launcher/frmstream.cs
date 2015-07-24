@@ -319,7 +319,17 @@ namespace Radio_Stream_Launcher
  
             //Es soll aktualisiert werden, ob von außerhalb der Ton stummgeschalten wurde
             if (wmpl.Mute == true) btnmute.Text = "<";
-            if (wmpl.Mute == false) btnmute.Text = "<))";
+            if (wmpl.Mute == false) //Anhand der Laustärke soll der Text in dem Button geschalten werden
+            {
+                if (wmpl.Volume == 0)
+                    btnmute.Text = "<";
+                else if (wmpl.Volume < 31 && wmpl.Volume > 0)
+                    btnmute.Text = "<)";
+                else if (wmpl.Volume > 30 && wmpl.Volume < 61)
+                    btnmute.Text = "<))";
+                else
+                    btnmute.Text = "<)))";
+            }
         }
 
         private void btnmute_Click(object sender, EventArgs e)

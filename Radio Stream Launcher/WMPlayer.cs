@@ -55,7 +55,7 @@ namespace Radio_Stream_Launcher
         }
 
         /// <summary>
-        /// Ruft ab, ob die Lautstärke auf Stumm geschalten ist oder legt diesen fest
+        /// Ruft ab, ob die Lautstärke auf Stumm geschalten ist, oder legt diesen fest
         /// </summary>
         public bool Mute
         {
@@ -64,7 +64,7 @@ namespace Radio_Stream_Launcher
         }
 
         /// <summary>
-        /// Gibt den aktuelen Status des Streams an.
+        /// Gibt den aktuellen Status des Streams an.
         /// </summary>
         private enum PlayStatus
         {

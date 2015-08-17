@@ -48,6 +48,7 @@ namespace Radio_Stream_Launcher
                     txtstreamname.Text = sl.GetValueExt(i, 0);
                     txtstreamurl.Text = sl.GetValueExt(i, 1);
                     cbgruppe.Text = sl.GetValueExt(i, 2);
+                    if (sl.GetValueExt(i, 3) == "j") cbfavorit.Checked = true; else cbfavorit.Checked = false;
                     groupindex = e.Node.Parent.Index;
                     entryindex = e.Node.Index;
                     dbentry = i;
@@ -70,7 +71,7 @@ namespace Radio_Stream_Launcher
             frm.ShowDialog();
             if (frm.changes == true)
             {
-                sl.AddEntry(frm.streamname, frm.streamurl, frm.gruppe );
+                sl.AddEntry(frm.streamname, frm.streamurl, frm.gruppe, frm.favorit);
                 if (frm.newgroup == true )
                 {
                     TVAddGroup(frm.gruppe);
@@ -95,13 +96,14 @@ namespace Radio_Stream_Launcher
             int i;
             for (i = 0; i < sl.RecordCount; i++)
             {
-                if (txtstreamname.Text == sl.GetValueExt(i,0) && sl.GetValueExt(i,2) == tvstream.Nodes[groupindex].Text )
+                if (txtstreamname.Text == sl.GetValueExt(i,0) && sl.GetValueExt(i,2) == tvstream.Nodes[groupindex].Text)
                 {
                     tvstream.Nodes[groupindex].Nodes[entryindex].Remove();
                     TVAddEntry(txtstreamname.Text, cbgruppe.Text);
                     sl.WriteRowDataExt(i, 0, txtstreamname.Text);
                     sl.WriteRowDataExt(i, 1, txtstreamurl.Text);
                     sl.WriteRowDataExt(i, 2, cbgruppe.Text);
+                    sl.WriteRowDataExt(i, 3, BoolToString(cbfavorit.Checked));
                     ShowData(txtstreamname.Text, cbgruppe.Text, GetGroupIndex(cbgruppe.Text), tvstream.Nodes[0].Nodes[GetGroupIndex(cbgruppe.Text)].Nodes.Count - 1);
                     return;
                 }
@@ -119,6 +121,7 @@ namespace Radio_Stream_Launcher
                     txtstreamname.Text = sl.GetValueExt(i, 0);
                     txtstreamurl.Text = sl.GetValueExt(i, 1);
                     cbgruppe.Text = sl.GetValueExt(i, 2);
+                    if (sl.GetValueExt(i, 3) == "j") cbfavorit.Checked = true; else cbfavorit.Checked = false;
                     entryindex = GetEntryIndex(txtstreamname.Text, cbgruppe.Text);
                     groupindex = GetGroupIndex(cbgruppe.Text);
                     return;
@@ -220,6 +223,7 @@ namespace Radio_Stream_Launcher
                     txtstreamname.Text = sl.GetValueExt(i, 0);
                     txtstreamurl.Text = sl.GetValueExt(i, 1);
                     cbgruppe.Text = sl.GetValueExt(i,2);
+                    if (sl.GetValueExt(i, 3) == "j") cbfavorit.Checked = true; else cbfavorit.Checked = false;
                     groupindex = gindex;
                     entryindex = eindex;
                     dbentry = i;
@@ -263,6 +267,11 @@ namespace Radio_Stream_Launcher
                 }
             }
             return -1;
+        }
+
+        private string BoolToString(bool value)
+        {
+            if (value == true) return "j"; else return "n";
         }
     }
 }

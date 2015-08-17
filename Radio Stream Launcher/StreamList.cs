@@ -74,6 +74,7 @@ namespace Radio_Stream_Launcher
                 _dt.Rows.Add(_row);
             }
             sr.Close();
+            DetectOldVersion();
         }
 
         /// <summary>
@@ -108,12 +109,13 @@ namespace Radio_Stream_Launcher
         /// </summary>
         /// <param name="streamname">Der Name des Streams</param>
         /// <param name="streamurl">Die StreamURL</param>
-        public void AddEntry(string streamname, string streamurl, string gruppe)
+        public void AddEntry(string streamname, string streamurl, string gruppe, string favorite)
         {
             _row = _dt.NewRow();
             _row[0] = streamname;
             _row[1] = streamurl;
             _row[2] = gruppe;
+            _row[3] = favorite; 
             _dt.Rows.Add(_row);
         }
 
@@ -272,6 +274,24 @@ namespace Radio_Stream_Launcher
             }
             sw.Close();
             return true;
+        }
+
+        /// <summary>
+        /// Gilt dann ab Version 1.2 von Radio Stream Launcher. Wenn die Streamliste dem alten Format entspricht, wird es geupdated
+        /// </summary>
+        private void DetectOldVersion()
+        {
+            _row = _dt.Rows[0]; //es wird über den ersten Eintrag überprüft, ob geupdated werden muss
+            if (_row[3].ToString() == "")
+            {
+                MessageBox.Show("Die Streamliste wird für die Verwendung geupdated");
+                int i;
+                for (i = 0; i < RecordCount; i++)
+                {
+                    WriteRowDataExt(i, 3, "n"); //Kein Eintrag wird mit Favorit versehen
+                }
+                WriteToFile(); //Neue Daten in Datei schreiben
+            }
         }
     }
 }

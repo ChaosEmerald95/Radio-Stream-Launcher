@@ -16,7 +16,7 @@ namespace Radio_Stream_Launcher
         public string streamname, streamurl;
         public bool changes = false;
         public bool newgroup = false;
-        public string gruppe;
+        public string gruppe, favorit;
 
         public frmnewstream(string[] grouplist)
         {
@@ -37,6 +37,7 @@ namespace Radio_Stream_Launcher
             }
             streamname = txtstreamname.Text;
             streamurl = txtstreamurl.Text;
+            if (cbfavorit.Checked == true) favorit = "j"; else favorit = "n";
             changes = true;
             this.Close();
         }

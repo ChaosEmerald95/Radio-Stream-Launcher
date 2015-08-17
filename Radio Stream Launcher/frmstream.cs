@@ -48,7 +48,11 @@ namespace Radio_Stream_Launcher
             //Laden der Liste in TreeView und Objekt
             sl.LoadData();
             int i;
-            tvstream.Nodes.Clear(); 
+            tvstream.Nodes.Clear(); //Nodes bereinigen
+
+            //Node für Streams erstellen
+            tvstream.Nodes.Add("Streams");
+
             for (i = 0; i < sl.RecordCount; i++)
             {
                 if (TVSearchGroupExists(sl.GetValueExt(i,2)) == false)
@@ -56,6 +60,13 @@ namespace Radio_Stream_Launcher
                     TVAddGroup(sl.GetValueExt(i, 2));
                 }
                 TVAddEntry(sl.GetValueExt(i, 0), sl.GetValueExt(i, 2));
+                
+                //Abfragen, ob auch in Favoriten eingetragen werden soll
+                if (sl.GetValueExt(i,3) == "j")
+                {
+                    if (tvstream.Nodes.Count == 1) tvstream.Nodes.Add("Favoriten"); //Wenn Favoriten noch nicht existiert, gleich erstellen
+                    tvstream.Nodes[1].Nodes.Add(sl.GetValueExt(i, 0));
+                }
             }
         }
 
@@ -250,18 +261,18 @@ namespace Radio_Stream_Launcher
 #region Treeview-Nodes-Funktionen
         private void TVAddGroup(string groupname)
         {
-            tvstream.Nodes.Add(groupname);
+            tvstream.Nodes[0].Nodes.Add(groupname);
         }
 
         private void TVAddEntry(string value, string groupname)
         {
             int i;
-            for (i = 0; i < tvstream.Nodes.Count; i++)
+            for (i = 0; i < tvstream.Nodes[0].Nodes.Count; i++)
             {
-                if (tvstream.Nodes[i].Text == groupname)
+                if (tvstream.Nodes[0].Nodes[i].Text == groupname)
                 {
                     TreeNode tn = new TreeNode(value);
-                    tvstream.Nodes[i].Nodes.Add(tn);
+                    tvstream.Nodes[0].Nodes[i].Nodes.Add(tn);
                 }
             }
         }
@@ -269,9 +280,9 @@ namespace Radio_Stream_Launcher
         private bool TVSearchGroupExists(string group)
         {
             int i;
-            for (i = 0; i < tvstream.Nodes.Count; i++)
+            for (i = 0; i < tvstream.Nodes[0].Nodes.Count; i++)
             {
-                if (tvstream.Nodes[i].Text == group)
+                if (tvstream.Nodes[0].Nodes[i].Text == group)
                 {
                     return true;
                 }

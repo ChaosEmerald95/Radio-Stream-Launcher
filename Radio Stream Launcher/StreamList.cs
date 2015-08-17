@@ -44,6 +44,7 @@ namespace Radio_Stream_Launcher
             _dt.Columns.Add("Streamname");
             _dt.Columns.Add("Stream-URL");
             _dt.Columns.Add("Gruppe");
+            _dt.Columns.Add("Favorite");
         }
 
         /// <summary>

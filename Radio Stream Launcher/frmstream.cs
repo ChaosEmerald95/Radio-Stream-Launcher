@@ -160,17 +160,14 @@ namespace Radio_Stream_Launcher
                 }
                 else
                 {
-                    if (cfg.ExternerPlayer == true)
+                    if (expl.Stop() == true)
                     {
-                        if (expl.Stop() == true)
-                        {
-                            btnstream.Text = "Stream starten";
-                            statustimer.Stop();
-                            statustimer.Enabled = false;
-                            int w = this.Size.Width;
-                            this.Size = new Size(w, minheight);
-                            this.Text = "Radio Stream Launcher";
-                        }
+                        btnstream.Text = "Stream starten";
+                        statustimer.Stop();
+                        statustimer.Enabled = false;
+                        int w = this.Size.Width;
+                        this.Size = new Size(w, minheight);
+                        this.Text = "Radio Stream Launcher";
                     }
                 }
             }

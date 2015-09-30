@@ -13,14 +13,15 @@ namespace Radio_Stream_Launcher
 {
     public partial class frmstream : Form
     {
-        const int maxheight = 375;
-        const int minheight = 182;
+        const int maxheight = 405;
+        const int minheight = 212;
 
         //Die Klassen
         StreamList sl;
         configuration cfg;
         WMPlayer wmpl;
         ExtPlayer expl; //Für das Abspielen über den externen Player
+        Record rec = new Record(); //Zum Aufnehmen des Audios(Warnung: Es wird der Sound von allen Programmen aufgenommen)
         
         public frmstream()
         {
@@ -374,6 +375,11 @@ namespace Radio_Stream_Launcher
         {
             cfg.WriteConfig(); //Konfiguration sichern
             SaveVolTmp(); //Soll die letzten Volume-Einstellungen cachen, damit diese beim nächsten Start verwendet werden können
+            try
+            {
+                rec = null;
+            }
+            catch { }
         }
 
         private void btnrefresh_Click(object sender, EventArgs e)
@@ -403,6 +409,21 @@ namespace Radio_Stream_Launcher
                 wwwbrowser.Visible = false;
                 int w = this.Size.Width;
                 this.Size = new Size(w, minheight);
+            }
+        }
+
+        private void btnrecord_Click(object sender, EventArgs e)
+        {
+            //Prüfen, ob bereits eine Aufnahme läuft oder nicht (muss eigentlich nicht getan werden, aber für die Button-Darstellung notwendig)
+            if (rec.IsRecord() == false) //Wenn nichts aufgenommen wird
+            {
+                rec.Start();
+                btnrecord.BackColor = Color.Crimson;
+            }
+            else
+            {
+                rec.Stopp();
+                btnrecord.BackColor = Color.FromArgb(225, 225, 225);
             }
         }
     }

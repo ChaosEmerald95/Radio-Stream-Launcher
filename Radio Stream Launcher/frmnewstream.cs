@@ -13,10 +13,8 @@ namespace Radio_Stream_Launcher
 {
     public partial class frmnewstream : Form
     {
-        public string streamname, streamurl;
-        public bool changes = false;
+        public string streamname, streamurl, gruppe, favorit;
         public bool newgroup = false;
-        public string gruppe, favorit;
 
         public frmnewstream(string[] grouplist)
         {
@@ -38,8 +36,7 @@ namespace Radio_Stream_Launcher
             streamname = txtstreamname.Text;
             streamurl = txtstreamurl.Text;
             if (cbfavorit.Checked == true) favorit = "j"; else favorit = "n";
-            changes = true;
-            this.Close();
+            Close();
         }
 
         private void cbgruppe_SelectedIndexChanged(object sender, EventArgs e)

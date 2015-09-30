@@ -12,26 +12,12 @@ namespace Radio_Stream_Launcher
 {
     public partial class frmoptions : Form
     {
-        private string _stream;
-        private string _irc;
-        private bool _player;
+        public ConfigData.ConfigurationData d;
 
-        private bool _proxyon;
-        private string _proxyname;
-        private int _proxyport;
-        private bool _proxybypass;
-        public bool changes = false;
-
-        public frmoptions(string streampfad, string ircpfad, bool player, bool proxyon, string proxyname, int proxyport, bool proxybypass)
+        public frmoptions(ConfigData.ConfigurationData data)
         {
             InitializeComponent();
-            _stream = streampfad;
-            _irc = ircpfad;
-            _player = player;
-            _proxyon = proxyon;
-            _proxyname = proxyname;
-            _proxyport = proxyport;
-            _proxybypass = proxybypass;
+            d = data; //Daten werden kopiert
         }
 
         private void btnsearchstream_Click(object sender, EventArgs e)
@@ -60,107 +46,76 @@ namespace Radio_Stream_Launcher
             }
         }
 
-        public string IRCPfad
-        {
-            get { return _irc; }
-        }
-
-        public string StreamPfad
-        {
-            get { return _stream; }
-        }
-
-        public bool ExternerPlayer
-        {
-            get { return _player; }
-        }
-
-        public bool ProxyOn
-        {
-            get { return _proxyon; }
-        }
-
-        public string ProxyName
-        {
-            get { return _proxyname; }
-        }
-
-        public int ProxyPort
-        {
-            get { return _proxyport; }
-        }
-
-        public bool ProxyBypass
-        {
-            get { return _proxybypass; }
-        }
-
         private void txtpfadstream_TextChanged(object sender, EventArgs e)
         {
-            _stream = txtpfadstream.Text; 
+            d._streampfad  = txtpfadstream.Text; 
         }
 
         private void txtpfadirc_TextChanged(object sender, EventArgs e)
         {
-            _irc = txtpfadirc.Text; 
+            d._ircpfad  = txtpfadirc.Text; 
         }
 
         private void rbintern_CheckedChanged(object sender, EventArgs e)
         {
-            _player = false;
+            d._externplayer  = false;
         }
 
         private void rbextern_CheckedChanged(object sender, EventArgs e)
         {
-            _player = true;
+            d._externplayer  = true;
         }
 
         private void btnaccept_Click(object sender, EventArgs e)
         {
-            changes = true;
-            this.Close();
+            Close();
+        }
+
+        public ConfigData.ConfigurationData Data()
+        {
+            return d;
         }
 
         private void frmoptions_Load(object sender, EventArgs e)
         {
-            txtpfadirc.Text = _irc;
-            txtpfadstream.Text = _stream;
-            txtproxyadresse.Text = _proxyname;
-            txtproxyport.Text = _proxyport.ToString();
-            cbproxyenabled.Checked = _proxyon;
-            cbproxybypass.Checked = _proxybypass;
+            txtpfadirc.Text = d._ircpfad ;
+            txtpfadstream.Text = d._streampfad ;
+            txtproxyadresse.Text = d._proxyname ;
+            txtproxyport.Text = d._proxyport .ToString();
+            cbproxyenabled.Checked = d._proxyon ;
+            cbproxybypass.Checked = d._proxybypass;
 
             //RadioButton
-            if (_player == true) rbextern.Checked = true;
-            if (_player == false) rbintern.Checked = true;
+            if (d._externplayer  == true) rbextern.Checked = true;
+            if (d._externplayer  == false) rbintern.Checked = true;
 
             SetProxyTab();
         }
 
         private void cbproxyenabled_CheckedChanged(object sender, EventArgs e)
         {
-            _proxyon = cbproxyenabled.Checked;
+            d._proxyon = cbproxyenabled.Checked;
             SetProxyTab();
         }
 
         private void txtproxyadresse_TextChanged(object sender, EventArgs e)
         {
-            _proxyname = txtproxyadresse.Text; 
+            d._proxyname = txtproxyadresse.Text; 
         }
 
         private void txtproxyport_TextChanged(object sender, EventArgs e)
         {
-            _proxyport = Convert.ToInt32(txtproxyport.Text);
+            d._proxyport = Convert.ToInt32(txtproxyport.Text);
         }
 
         private void cbproxybypass_CheckedChanged(object sender, EventArgs e)
         {
-            _proxybypass = cbproxybypass.Checked; 
+            d._proxybypass = cbproxybypass.Checked; 
         }
 
         private void SetProxyTab()
         {
-            if (_proxyon )
+            if (d._proxyon )
             {
                 txtproxyadresse.Enabled = true;
                 txtproxyport.Enabled = true;

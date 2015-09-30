@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms; 
+using System.Windows.Forms;
 
 namespace Radio_Stream_Launcher
 {
@@ -21,17 +21,17 @@ namespace Radio_Stream_Launcher
             _wmplayer = new WMPLib.WindowsMediaPlayer(); //Für den Media Player
             _playstatus = PlayStatus.Stop;
             Volume = 100; //Damit das Volume auf 100 ist
-            Mute = false; //Damit s nicht stummgeschalten ist
+            Mute = false; //Damit es nicht stummgeschalten ist
         }
 
         /// <summary>
         /// Ruft den Wert der StreamURL ab oder legt diesen fest
         /// </summary>
-        public string Streamurl
+        public string StreamURL
         {
             get { return _streamurl; }
-            set 
-            { 
+            set
+            {
                 _streamurl = value;
                 _wmplayer.URL = value;
             }
@@ -78,7 +78,7 @@ namespace Radio_Stream_Launcher
         /// </summary>
         /// <returns></returns>
         public bool Play()
-        {    
+        {
             //Prüfen, ob vorher eine Stream-URL festgelegt wurde
             if (_streamurl == "")
             {
@@ -89,7 +89,7 @@ namespace Radio_Stream_Launcher
             try
             {
                 _wmplayer.controls.play();
-                _playstatus = PlayStatus.Play; 
+                _playstatus = PlayStatus.Play;
                 return true;
             }
             catch (Exception ex)
@@ -98,7 +98,7 @@ namespace Radio_Stream_Launcher
                 return false;
             }
         }
-           
+
         /// <summary>
         /// Pausiert den Stream und gibt das Result zurück
         /// </summary>
@@ -106,7 +106,7 @@ namespace Radio_Stream_Launcher
         public bool Pause()
         {
             //Aktuellen Status des Streams prüfen
-            if (_playstatus == PlayStatus.Play )
+            if (_playstatus == PlayStatus.Play)
             {
                 _wmplayer.controls.pause();
                 _playstatus = PlayStatus.Pause;
@@ -125,10 +125,10 @@ namespace Radio_Stream_Launcher
         public bool Stop()
         {
             //Aktuellen Status des Streams prüfen
-            if (_playstatus == PlayStatus.Play || _playstatus == PlayStatus.Pause )
+            if (_playstatus == PlayStatus.Play || _playstatus == PlayStatus.Pause)
             {
                 _wmplayer.controls.stop();
-                _playstatus = PlayStatus.Stop ;
+                _playstatus = PlayStatus.Stop;
                 return true;
             }
             else
@@ -143,7 +143,7 @@ namespace Radio_Stream_Launcher
         /// <returns></returns>
         public bool IsPlayed()
         {
-            if(_playstatus == PlayStatus.Play )
+            if (_playstatus == PlayStatus.Play)
             {
                 return true;
             }
@@ -209,10 +209,10 @@ namespace Radio_Stream_Launcher
             {
                 int v = 0;
                 if (value == ProxySetting.NoProxy) v = 0;
-                if (value == ProxySetting.BrowserSettings ) v = 1;
-                if (value == ProxySetting.ManualSettings ) v = 2;
-                if (value == ProxySetting.AutoDetectSettings ) v = 3;
-                _wmplayer.network.setProxySettings("HTTP",v); 
+                if (value == ProxySetting.BrowserSettings) v = 1;
+                if (value == ProxySetting.ManualSettings) v = 2;
+                if (value == ProxySetting.AutoDetectSettings) v = 3;
+                _wmplayer.network.setProxySettings("HTTP", v);
             }
         }
         #endregion

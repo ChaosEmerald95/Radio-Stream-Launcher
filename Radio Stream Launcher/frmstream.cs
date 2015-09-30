@@ -27,6 +27,12 @@ namespace Radio_Stream_Launcher
             InitializeComponent();
             cfg = new configuration();
             cfg.LoadConfiguration();
+            //Prüfen, ob Streamliste wirklich da ist und auch mal im Dateiverzeichnis schauen
+            if (File.Exists(cfg.StreamPfad ) == false) //Wenn es nicht gefunden wurde
+            {
+                cfg.StreamPfad = Directory.GetCurrentDirectory() + @"\streams.rsls";
+            }
+
             sl = new StreamList(cfg.StreamPfad);
             wmpl = new WMPlayer();
             expl = new ExtPlayer();
@@ -125,7 +131,7 @@ namespace Radio_Stream_Launcher
             {
                 if (wmpl.IsPlayed() == false) 
                 {
-                    wmpl.Streamurl = txtstreamurl.Text;
+                    wmpl.StreamURL = txtstreamurl.Text;
                     if (wmpl.Play() == true)
                     {
                         btnstream.Text = "Stream stoppen";
@@ -150,7 +156,7 @@ namespace Radio_Stream_Launcher
             {
                 if (expl.IsPlayed() == false)
                 {
-                    expl.Streamurl = txtstreamurl.Text;
+                    expl.StreamURL = txtstreamurl.Text;
                     if (expl.Play() == true)
                     {
                         btnstream.Text = "Stream stoppen";
@@ -206,20 +212,12 @@ namespace Radio_Stream_Launcher
 
         private void optionenToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            frmoptions frm = new frmoptions(cfg.StreamPfad, cfg.IRCPfad, cfg.ExternerPlayer, cfg.ProxyOn,cfg.ProxyName,cfg.ProxyPort, cfg.ProxyBypass);
-            frm.ShowDialog();
-            if (frm.changes == true)
+            frmoptions frm = new frmoptions(cfg.GetConfigData());
+            if (frm.ShowDialog() == DialogResult.OK )
             {
-                cfg.IRCPfad = frm.IRCPfad;
-                cfg.StreamPfad = frm.StreamPfad;
-                cfg.ExternerPlayer = frm.ExternerPlayer;
-                cfg.ProxyOn = frm.ProxyOn;
-                cfg.ProxyName = frm.ProxyName;
-                cfg.ProxyPort = frm.ProxyPort;
-                cfg.ProxyBypass = frm.ProxyBypass;
-                cfg.WriteConfig();
+                cfg.SetConfigData(frm.Data());
                 ConfigWMPProxy();
-                sl.Dateipfad = frm.StreamPfad;
+                sl.Dateipfad = cfg.StreamPfad;
                 streamlisteLadenToolStripMenuItem_Click(streamlisteLadenToolStripMenuItem, null);
             }
         }
@@ -374,6 +372,7 @@ namespace Radio_Stream_Launcher
 
         private void frmstream_FormClosing(object sender, FormClosingEventArgs e)
         {
+            cfg.WriteConfig(); //Konfiguration sichern
             SaveVolTmp(); //Soll die letzten Volume-Einstellungen cachen, damit diese beim nächsten Start verwendet werden können
         }
 

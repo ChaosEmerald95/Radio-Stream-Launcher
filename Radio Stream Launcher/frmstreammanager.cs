@@ -61,15 +61,14 @@ namespace Radio_Stream_Launcher
         {
             //Array mit Liste aller Gruppen erstellen
             int i;
-            string[] groups = new string[tvstream.Nodes[0].Nodes.Count];
-            for (i = 0; i < tvstream.Nodes[0].Nodes.Count; i++)
+            string[] groups = new string[tvstream.Nodes.Count];
+            for (i = 0; i < tvstream.Nodes.Count; i++)
             {
-                groups[i] = tvstream.Nodes[0].Nodes[i].Text; 
+                groups[i] = tvstream.Nodes[i].Text; 
             }
 
             frmnewstream frm = new frmnewstream(groups);
-            frm.ShowDialog();
-            if (frm.changes == true)
+            if (frm.ShowDialog() == DialogResult.OK )
             {
                 sl.AddEntry(frm.streamname, frm.streamurl, frm.gruppe, frm.favorit);
                 if (frm.newgroup == true )
@@ -104,7 +103,7 @@ namespace Radio_Stream_Launcher
                     sl.WriteRowDataExt(i, 1, txtstreamurl.Text);
                     sl.WriteRowDataExt(i, 2, cbgruppe.Text);
                     sl.WriteRowDataExt(i, 3, BoolToString(cbfavorit.Checked));
-                    ShowData(txtstreamname.Text, cbgruppe.Text, GetGroupIndex(cbgruppe.Text), tvstream.Nodes[0].Nodes[GetGroupIndex(cbgruppe.Text)].Nodes.Count - 1);
+                    ShowData(txtstreamname.Text, cbgruppe.Text, GetGroupIndex(cbgruppe.Text), tvstream.Nodes[GetGroupIndex(cbgruppe.Text)].Nodes.Count - 1);
                     return;
                 }
             }
@@ -135,7 +134,7 @@ namespace Radio_Stream_Launcher
         }
 
 
-        //Treeview-Nodes-Funktionen
+        #region  Treeview-Nodes-Funktionen
         private void TVAddGroup(string groupname)
         {
             tvstream.Nodes.Add(groupname);
@@ -144,13 +143,12 @@ namespace Radio_Stream_Launcher
         private void TVAddEntry(string value, string groupname)
         {
             int i;
-            for(i = 0;i < tvstream.Nodes.Count;i++)
+            for (i = 0; i < tvstream.Nodes.Count; i++)
             {
                 if (tvstream.Nodes[i].Text == groupname)
                 {
                     TreeNode tn = new TreeNode(value);
                     tvstream.Nodes[i].Nodes.Add(tn);
-                    return;
                 }
             }
         }
@@ -185,7 +183,7 @@ namespace Radio_Stream_Launcher
         private void TVDeleteGroup(string gruppe)
         {
             int i, j;
-            for (i = 0; i < sl.RecordCount; i++)
+            for (i = 0; i < tvstream.Nodes.Count; i++)
             {
                 if (tvstream.Nodes[i].Text == gruppe )
                 {
@@ -193,9 +191,11 @@ namespace Radio_Stream_Launcher
                     {
                         TVDeleteEntry(tvstream.Nodes[i].Nodes[j].Text, i);
                     }
+                    tvstream.Nodes[i].Remove();
                 }
             }
         }
+        #endregion
 
         /// <summary>
         /// Füllt die ComboBox mit den Namen der Gruppen und wählt die Gruppe aus, in welcher sich der Stream befindet

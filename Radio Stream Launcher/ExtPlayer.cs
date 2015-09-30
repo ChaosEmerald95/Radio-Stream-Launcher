@@ -27,13 +27,13 @@ namespace Radio_Stream_Launcher
         /// <summary>
         /// Ruft den Wert der StreamURL ab oder legt diesen fest
         /// </summary>
-        public string Streamurl
+        public string StreamURL
         {
             get { return _streamurl; }
             set
             {
                 _streamurl = value;
-                p.StartInfo.FileName = _tmpm3u ;
+                p.StartInfo.FileName = _tmpm3u;
             }
         }
 
@@ -59,7 +59,7 @@ namespace Radio_Stream_Launcher
             {
                 //Stream-URL wird in temporäre Datei geschrieben
                 StreamWriter sw = new StreamWriter(_tmpm3u);
-                sw.WriteLine(_streamurl );
+                sw.WriteLine(_streamurl);
                 sw.Close();
 
                 //Prozess wird gestartet. Dabei wird der Player gestartet, der auf die Erweiterung m3u assoziiert ist
@@ -122,3 +122,4 @@ namespace Radio_Stream_Launcher
         }
     }
 }
+

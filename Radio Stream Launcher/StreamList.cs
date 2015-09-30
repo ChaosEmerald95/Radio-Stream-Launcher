@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Data;
 using System.IO;
 using System.Windows.Forms;
-using Microsoft.VisualBasic;
 
 namespace Radio_Stream_Launcher
 {
     class StreamList
     {
-        private string _pfad = "";
         private int _cursor = 0;
         private DataTable _dt;
         private DataRow _row;
@@ -22,7 +17,7 @@ namespace Radio_Stream_Launcher
         /// <param name="dateipfad">Der Pfad zur Streamdatei</param>
         public StreamList(string dateipfad)
         {
-            _pfad = dateipfad;
+            Dateipfad = dateipfad;
             _dt = new DataTable();
             PrepareDataTable();
         }
@@ -30,11 +25,7 @@ namespace Radio_Stream_Launcher
         /// <summary>
         /// Ruft den Dateipfad ab oder legt diesen fest
         /// </summary>
-        public string Dateipfad
-        {
-            get { return _pfad; }
-            set { _pfad = value;  }
-        }
+        public string Dateipfad { get; set; }
 
         /// <summary>
         /// Erstellt die Spalten für die DataTable
@@ -53,21 +44,20 @@ namespace Radio_Stream_Launcher
         /// <returns></returns>
         public void LoadData()
         {
-            if (File.Exists(_pfad ) == false)
+            if (File.Exists(Dateipfad) == false)
             {
                 return;
             }
             _dt.Rows.Clear();
             //Daten werden geladen
-            int linecount = GetLines(_pfad); //Gibt die Anzahl der Zeilen zurück
-            StreamReader sr = new StreamReader(_pfad); //Streamreader wird geöffnet
-            int i, j;
+            int linecount = GetLines(Dateipfad); //Gibt die Anzahl der Zeilen zurück
+            StreamReader sr = new StreamReader(Dateipfad); //Streamreader wird geöffnet
             //Daten werden geladen
-            for (i = 0; i < linecount; i++)
+            for (int i = 0; i < linecount; i++)
             {
                 _row = _dt.NewRow();
-                string[] streamdata = sr.ReadLine().Split(";".ToCharArray(),StringSplitOptions.None); //Streamdaten getrennt
-                for (j = 0; j < streamdata.Length; j++ )
+                string[] streamdata = sr.ReadLine().Split(";".ToCharArray(), StringSplitOptions.None); //Streamdaten getrennt
+                for (int j = 0; j < streamdata.Length; j++)
                 {
                     _row[j] = streamdata[j];
                 }
@@ -115,7 +105,7 @@ namespace Radio_Stream_Launcher
             _row[0] = streamname;
             _row[1] = streamurl;
             _row[2] = gruppe;
-            _row[3] = favorite; 
+            _row[3] = favorite;
             _dt.Rows.Add(_row);
         }
 
@@ -126,10 +116,9 @@ namespace Radio_Stream_Launcher
         /// <returns></returns>
         public bool DeleteStream(string streamname)
         {
-            int i;
-            for (i = 0; i < RecordCount; i++)
+            for (int i = 0; i < RecordCount; i++)
             {
-                if (GetValueExt(i,0) == streamname)
+                if (GetValueExt(i, 0) == streamname)
                 {
                     _dt.Rows.RemoveAt(i);
                     return true;
@@ -146,10 +135,9 @@ namespace Radio_Stream_Launcher
         /// <returns></returns>
         public bool DeleteStream(string streamname, string group)
         {
-            int i;
-            for (i = 0; i < RecordCount; i++)
+            for (int i = 0; i < RecordCount; i++)
             {
-                if (GetValueExt(i, 0) == streamname && GetValueExt(i,2) == group)
+                if (GetValueExt(i, 0) == streamname && GetValueExt(i, 2) == group)
                 {
                     _dt.Rows.RemoveAt(i);
                     return true;
@@ -177,9 +165,9 @@ namespace Radio_Stream_Launcher
             else
             {
                 _row = _dt.Rows[rowindex];
-                _cursor = rowindex; 
+                _cursor = rowindex;
             }
-             
+
         }
 
         /// <summary>
@@ -253,13 +241,12 @@ namespace Radio_Stream_Launcher
         /// <returns></returns>
         public bool WriteToFile()
         {
-            StreamWriter sw = new StreamWriter(_pfad);
-            int i, j;
-            for (i = 0; i < RecordCount; i++)
+            StreamWriter sw = new StreamWriter(Dateipfad);
+            for (int i = 0; i < RecordCount; i++)
             {
                 string sstring = string.Empty;
                 _row = _dt.Rows[i];
-                for (j = 0; j < ColumnCount; j++)
+                for (int j = 0; j < ColumnCount; j++)
                 {
                     if (j == 0)
                     {
@@ -285,8 +272,7 @@ namespace Radio_Stream_Launcher
             if (_row[3].ToString() == "")
             {
                 MessageBox.Show("Die Streamliste wird für die Verwendung geupdated");
-                int i;
-                for (i = 0; i < RecordCount; i++)
+                for (int i = 0; i < RecordCount; i++)
                 {
                     WriteRowDataExt(i, 3, "n"); //Kein Eintrag wird mit Favorit versehen
                 }

@@ -55,7 +55,7 @@ namespace Radio_Stream_Launcher
 
         private void btnok_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
     }
 }

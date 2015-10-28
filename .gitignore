@@ -9,9 +9,7 @@ obj
 Properties
 *.Designer.vb
 *.Designer.cs
-*.resx
 *.vbproj.user
-*.dll
 *.jpg
 *.msi
 *.txt

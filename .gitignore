@@ -1,19 +1,9 @@
-*.suo
-My Project
 [Bb]in
 [Dd]ebug
 [Rr]elease
-App.config
-obj
 
-Properties
-*.Designer.vb
-*.Designer.cs
-*.vbproj.user
+
 *.jpg
 *.msi
 *.txt
-Icons
-Graphics
-Program.cs
-*.csproj.user
+
